@@ -3,7 +3,8 @@ const routes = require('./controllers');
 const sequelize = require('./config/connection');
 const path = require('path');
 
-
+// const PORT = process.env.PORT || 3001;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/Tech-Blog";
 
 // helper function
 const helpers = require('./utils/helpers');
@@ -34,6 +35,11 @@ app.use(session(sess));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
 
 // set Handlebars as the default template engine
 app.engine('handlebars', hbs.engine);
