@@ -67,18 +67,13 @@ router.get('/:id', (req, res) => {
       }
   ]
 })
-      .then(dbPostData => {
-        if (!dbPostData) {
-          res.status(404).json({ message: 'Not a post was found with this ID' });
-          return;
-        }
-        res.json(dbPostData);
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json({ message: "Error" });
-      });
-  });
+
+.then(dbPostData => res.json(dbPostData))
+.catch(err => {
+  console.log(err);
+  res.status(500).json({ message: "Error" });
+});
+});
 
 // creating a post
 router.post('/', withAuth, (req, res) => {
@@ -99,8 +94,7 @@ router.post('/', withAuth, (req, res) => {
 
 
 
-// Updates the post title
-
+// Updates post title
 router.put('/:id', withAuth, (req, res) => {
     Post.update({
         title: req.body.title,
@@ -112,35 +106,41 @@ router.put('/:id', withAuth, (req, res) => {
         }
     }).then(dbPostData => {
         if (!dbPostData) {
-            res.status(404).json({ message: 'No post found with this id' });
+            res.status(404).json({ message: 'No post with this ID was found' });
             return;
         }
         res.json(dbPostData);
     })
       .catch(err => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json({ message: "Error" });
     });
 });
 
 
 
-// delete a post 
-router.delete('/:id', withAuth, (req, res) => {
-    Post.destroy({
-        where: {
-            id: req.params.id 
-        }
-    }).then(dbPostData => {
-        if (!dbPostData) {
-            res.status(404).json({ message: 'No post found with this id' });
-            return;
-        }
-        res.json(dbPostData);
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+// To Delete a post
+
+router.delete('/:id', Auth, (req, res) => {
+  console.log(req.params.id, '---------------');
+  Post.destroy({
+      where: {
+          id: req.params.id
+      }
+  })
+
+
+  .then(dbPostData => {
+      if (!dbPostData) {
+          res.status(404).json({ message: "No post with this ID has been found" })
+          return;
+      }
+      res.json(dbPostData);
+  })
+  .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: "Error" });
+  });
 });
 
 module.exports = router;
