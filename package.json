@@ -1,31 +1,26 @@
 {
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "connect-session-sequelize": "^7.1.2",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.3",
-    "express-handlebars": "^6.0.2",
-    "express-session": "^1.17.2",
-    "mongoose": "^6.2.4",
-    "mysql2": "^2.3.3",
-    "sequelize": "^6.17.0"
-  },
-  "scripts": {
-    "start": "node server.js"
-  },
   "name": "tech-blog",
-  "description": "",
   "version": "1.0.0",
+  "description": "",
   "main": "server.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bvsswave/Tech-Blog.git"
+  "scripts": {
+    "test": "jest",
+    "seeds": "node seeds/index.js"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/bvsswave/Tech-Blog/issues"
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-session-sequelize": "^6.1.1",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "express-session": "^1.17.0",
+    "handlebars": "^4.7.3",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.5"
   },
-  "homepage": "https://github.com/bvsswave/Tech-Blog#readme"
+  "devDependencies": {
+    "jest": "^25.1.0"
+  }
 }
