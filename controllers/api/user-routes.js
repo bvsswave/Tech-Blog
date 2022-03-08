@@ -1,22 +1,22 @@
 const router = require('express').Router();
-const { User, Post, Comment } = require('../../models');
+const { Post, User, Comment } = require('../models');
+// const Auth = require('../utils/auth');
 
-// GET /api/users
 router.get('/', (req, res) => {
-    // access our user model and run .findAll() method -- similar to SELECT * FROM users;
     User.findAll({
-        attributes: { exclude: ['[password']}
+        attributes: { exclude: ['password'] } 
     })
     .then(dbUserData => res.json(dbUserData))
     .catch(err => {
-        console.log(err); 
-        res.status(500).json(err);
+        console.log(err);
+        res.status(500).json({ message: 'Error' });
     });
 });
 
 
 
-// GET /api/users/1
+// GET id from users
+
 router.get('/:id', (req, res) => {
     User.findOne({
         attributes: { exclude: ['password'] },
@@ -32,58 +32,89 @@ router.get('/:id', (req, res) => {
                 'content', 
                 'created_at']
           },
-          // include the Comment model here:
+          // Comment Model
           {
             model: Comment,
-            attributes: ['id', 'comment_text', 'created_at'],
+            attributes: ['id', 'text', 'created_at'],
             include: {
               model: Post,
               attributes: ['title']
             }
-          },
-          {
-            model: Post,
-            attributes: ['title'],
-          }
-        ]
-      })
+        }
+      ]
+    
+  })
+    //       {
+    //         model: Post,
+    //         attributes: ['title'],
+    //       }
+    //     ]
+    //   })
+
       .then(dbUserData => {
         if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id' });
+          res.status(404).json({ message: 'No user with this ID was found' });
           return;
         }
         res.json(dbUserData);
       })
       .catch(err => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json({ message: 'Error' });
       });
 });
 
-// POST /api/users - similar to INSERT INTO users / VALUES 
+// Adds user
+
 router.post('/', (req, res) => {
-    // expects {username: 'Lernantino', password: 'password1234'}
-    User.create({
-        username: req.body.username,
-        password: req.body.password
-    })
-    // store user data during session 
-    .then(dbUserData => {
-    req.session.save(() => {
-        req.session.user_id = dbUserData.id;
-        req.session.username = dbUserData.username;
-        req.session.loggedIn = true;
-
-        res.json(dbUserData);
+    console.log(req.body)
+      // expects {username: 'Bvsswave', email: 'tannershahan@gmail.com', 'password: 'password1234'}
+      User.create({
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password
+      })
+      .then(dbUserData => {
+        req.session.save(() => {
+          req.session.user_id = dbUserData.id;
+          req.session.username = dbUserData.username;
+          req.session.loggedIn = true;
+          res.json(dbUserData);
         });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      })
+      .catch(err => {
+          console.log(err);
+          res.status(500).json({ message: 'Error' });
       });
-});
 
-
+    });
+    //login route
+    router.post('/login', (req, res) => {
+        // expects {username: 'username', password: 'password1234'}
+        User.findOne({
+          where: {
+            username: req.body.username
+        }
+    }).then(dbUserData => {
+        if (!dbUserData) {
+          res.status(400).json({ message: 'There is no user with that username' });
+          return;
+        }
+        const validPassword = dbUserData.checkPassword(req.body.password);
+        if (!validPassword) {
+          res.status(400).json({ message: 'Password is Incorrect!' });
+          return;
+        }
+        req.session.save(() => {
+          req.session.user_id = dbUserData.id;
+          req.session.username = dbUserData.username;
+          req.session.loggedIn = true;
+  
+          res.json({ user: dbUserData, message: "Yay! You're logged in!" });
+        });
+        
+      });
+    }); 
 // POST to identify users 
 router.post('/login', (req, res) => {
     // expects {username: 'lernantino', password: 'password1234'}
