@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-
+// dotenv hides info
 require('dotenv').config();
 
 
