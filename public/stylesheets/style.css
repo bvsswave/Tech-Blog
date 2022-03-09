@@ -1,0 +1,73 @@
+body {
+    background: linear-gradient(#d66ba0, #af4d98);
+    background-repeat: no-repeat;
+    background-size: 1200px 900px;
+}
+.title {
+    padding-right: 20px;
+    color: #f4e4ba;
+    
+  
+}
+.blue-text {
+    color: gold;
+}
+
+.post {
+    width: 100%;
+    background-color: #e5a9a9;
+    padding: 20px 20px;
+}
+
+.post-list {
+    width: 100%;
+}
+
+.post-title {
+    background-color: #e5a9a9;
+    font-size: 30px;
+    color: gold;
+}
+
+.single-post-title {
+    background-color: #f4e4ba;
+    font-size: 20px;
+    color: blue;
+}
+
+.post-content {
+    background-color: purple;
+}
+
+a {
+    color: #f5f5f5;
+    text-decoration: none;
+}
+
+.edit-link {
+    color: gold;
+}
+
+.meta {
+    background-color: purple;
+}
+
+.signup-form {
+    justify-content: center;
+    background-color: purple;
+    color: gold;
+}
+.login-form {
+    justify-content: center;
+    background-color: purple;
+    color: gold;
+}
+
+a :hover {
+    color: gold;
+}
+
+.comments {
+    background-color: purple;
+    color: gold;
+}
